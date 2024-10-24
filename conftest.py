@@ -10,9 +10,9 @@ SELENIUM_URLS = {
 
 # 각 PC에서 열 URL 및 로그인 정보 설정
 LOGIN_DATA = {
-    'e_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "QAE002", "2w2w2w2w2w", "QWER", "student_num1"),
-    'm_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "jw01", "2w2w2w2w2w", "test", "student_num2"),
-    'h_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "watest9", "2w2w2w2w2w", "mmm", "student_num3"),
+    'e_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "seleniumeclass1", "2w2w2w2w2w", "seleniume", "student_num1"),
+    'm_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "seleniummclass1", "2w2w2w2w2w", "seleniumm", "student_num2"),
+    'h_test': ("https://tb-edu.ontactedu.co.kr/office/goe", "seleniumhclass1", "2w2w2w2w2w", "seleniumh", "student_num3"),
 }
 
 def get_screen_size():
