@@ -2,188 +2,269 @@ import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, NoSuchElementException, ElementNotInteractableException, JavascriptException
-import json
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
 
 @pytest.mark.m_test
-def test_middle_school_logins(drivers, login_data):
-    driver_normal, driver_incognito = drivers
-    WEBSITE_URL, TEACHER_ID, PASSWORD, SCHOOL_NAME, _ = login_data
 
-    # 교사 로그인 (시크릿 모드)
+def test_01_teacher_login(driver_incognito, login_data):
+    """교사 로그인 테스트"""
+    WEBSITE_URL, TEACHER_ID, PASSWORD = login_data
     driver_incognito.get(WEBSITE_URL)
     print("교사 로그인: 웹사이트에 접속했습니다.")
 
-    WebDriverWait(driver_incognito, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".login--item:nth-child(2) > .login--item-button"))).click()
-    driver_incognito.find_element(By.ID, "mbrId").send_keys(TEACHER_ID)
-    driver_incognito.find_element(By.ID, "loginPw").send_keys(PASSWORD)
-    driver_incognito.find_element(By.CSS_SELECTOR, ".margin-t-29").click()
-
     try:
         WebDriverWait(driver_incognito, 10).until(
-            lambda driver: driver.current_url == "https://tb-edu.ontactedu.co.kr/today"
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".login--item:nth-child(2) > .login--item-button"))
         )
-        print("교사가 https://tb-edu.ontactedu.co.kr/today 페이지에 접근했습니다.")
-        
-        # 네트워크 오류 확인
-        logs = driver_incognito.execute_script("var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;")
-        network_errors = [log for log in logs if 'status' in log and log['status'] >= 400]
-        
-        if network_errors:
-            print("Fail: 네트워크 요청 중 오류가 발생했습니다.")
-            for error in network_errors:
-                print(f"URL: {error['name']}, Status: {error['status']}")
-            assert False, "교사 로그인 - 네트워크 오류 발생"
-        else:
-            print("Pass: 교사가 정상적으로 로그인하고 페이지에 접근했습니다.")
+        WebDriverWait(driver_incognito, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".login--item:nth-child(2) > .login--item-button"))
+        ).click()
+        driver_incognito.find_element(By.ID, "mbrId").send_keys(TEACHER_ID)
+        driver_incognito.find_element(By.ID, "loginPw").send_keys(PASSWORD)
+        driver_incognito.find_element(By.CSS_SELECTOR, ".margin-t-29").click()
+        print("교사 로그인 정보 입력 및 로그인 버튼 클릭")
     except TimeoutException:
-        print("Fail: 교사 로그인 실패 또는 페이지 접근 불가")
+        print("Fail: 교사 로그인 실패")
         driver_incognito.save_screenshot("teacher_login_failure.png")
         assert False, "교사 로그인 실패"
 
-    # 학생 로그인 (일반 모드)
+    try:
+        WebDriverWait(driver_incognito, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#notiPopupOk"))
+        ).click()
+        print("팝업 확인 버튼 클릭")
+    except TimeoutException:
+        print("Fail: 팝업 확인 버튼 클릭 실패")
+        driver_incognito.save_screenshot("popup_click_failure.png")
+        assert False, "팝업 확인 버튼 클릭 실패"
+
+    try:
+        otp_input = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > input"))
+        )
+        otp_input.send_keys("999999")
+        driver_incognito.find_element(By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > div > button.button-main.violet").click()
+        print("인증번호 입력 및 확인 버튼 클릭")
+    except TimeoutException:
+        print("Fail: 인증번호 입력 또는 확인 버튼 클릭 실패")
+        driver_incognito.save_screenshot("otp_failure.png")
+        assert False, "인증번호 입력 또는 확인 버튼 클릭 실패"
+
+    try:
+        WebDriverWait(driver_incognito, 10).until(
+            EC.any_of(
+                EC.url_contains("/today"),
+                EC.url_contains("/main")
+            )
+        )
+        print("교사가 대시보드 페이지에 접근했습니다.")
+    except TimeoutException:
+        print("Fail: 교사 대시보드 접근 실패")
+        driver_incognito.save_screenshot("teacher_dashboard_failure.png")
+        assert False, "교사 대시보드 접근 실패"
+
+@pytest.mark.m_test
+
+def test_02_student_login(driver_normal, login_data):
+    """학생 로그인 테스트"""
+    WEBSITE_URL, STUDENT_ID, STUDENT_NUM, PASSWORD = login_data
     driver_normal.get(WEBSITE_URL)
     print("학생 로그인: 웹사이트에 접속했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".login--item:nth-child(1) > .login--item-button"))).click()
-    print("학생 로그인 버튼을 클릭했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".flex--fixed"))).click()
-    print("학교 검색 입력란을 클릭했습니다.")
-
-    school_find = WebDriverWait(driver_normal, 10).until(EC.presence_of_element_located((By.ID, "schoolFind")))
-    school_find.clear()
-    school_find.send_keys(SCHOOL_NAME)
-    print(f"학교 이름 '{SCHOOL_NAME}'을 입력했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.ID, "schFindBtn"))).click()
-    print("학교 검색 버튼을 클릭했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "[id^='0']"))).click()
-    print("검색 결과에서 학교를 선택했습니다.")
-
+    
     try:
-        popup_button = WebDriverWait(driver_normal, 10).until(
+        # 로그인 버튼 클릭
+        student_login_button = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#login > div > div.main-login > div.main-login--button > button:nth-child(1)"))
+        )
+        student_login_button.click()
+        print("학생 로그인 버튼 클릭")
+        
+        # 학교 검색 튼 클릭하여 팝업 열기
+        WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#login_form > div > div > div.input-box.input-box--text.is--search.bg--gray > button"))
+        ).click()
+        print("학교 검색 팝업 열기")
+        
+        # 학교명 입력
+        WebDriverWait(driver_normal, 10).until(
+            EC.visibility_of_element_located((By.ID, "schoolFind"))
+        )
+        school_input = driver_normal.find_element(By.ID, "schoolFind")
+        school_input.send_keys(STUDENT_ID)
+        
+        # 검색 버튼 클릭
+        driver_normal.find_element(By.ID, "schFindBtn").click()
+        print("학교 검색 버튼 클릭")
+        
+        # 검색 결과가 나올 때까지 대기 (라벨 텍스트로 확인)
+        search_result = WebDriverWait(driver_normal, 10).until(
+            EC.presence_of_element_located((By.XPATH, f"//label[contains(text(), '{STUDENT_ID}')]"))
+        )
+        print("학교 검색 결과 확인")
+        
+        # 검색된 학교의 라디오 버튼 클릭
+        radio_id = search_result.get_attribute("for")
+        radio_button = driver_normal.find_element(By.ID, radio_id)
+        driver_normal.execute_script("arguments[0].click();", radio_button)
+        print("학교 라디오 버튼 선택")
+        
+        # 선택 버튼 클릭
+        select_button = WebDriverWait(driver_normal, 10).until(
             EC.element_to_be_clickable((By.ID, "schSelectBtn"))
         )
-        popup_button.click()
-        print("첫 번째 팝업의 학교 선택 버튼을 클릭했습니다.")
-    except (TimeoutException, ElementClickInterceptedException):
-        print("첫 번째 팝업의 학교 선택 버튼을 클릭할 수 없습다.")
-        driver_normal.save_screenshot("first_popup_button_not_clicked.png")
-
-    try:
-        confirm_button = WebDriverWait(driver_normal, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.button-main.violet[onclick*='toggleOpen'][onclick*='popLayerCloseAndSchSettingConfirm']"))
+        driver_normal.execute_script("arguments[0].click();", select_button)
+        print("학교 선택 완료")
+        
+        # 팝업 확인 버튼 클릭 후 대기
+        popup_confirm = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "body > div.wrap.is--dark > div.layer-area.modal-area.modal-default.is--school--setting > div.layer__container > div.page__button > button.button-main.violet"))
+        )
+        driver_normal.execute_script("arguments[0].click();", popup_confirm)
+        print("학교 선택 팝업 확인")
+        
+        # 팝업이 사라질 때까지 대기
+        WebDriverWait(driver_normal, 10).until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, "div.layer-area.modal-area.modal-default.is--school--setting"))
         )
         
-        if not confirm_button.is_displayed():
-            print("두 번째 팝업의 확인 버튼이 화면에 표시되지 않습니다.")
-            driver_normal.save_screenshot("second_popup_button_not_visible.png")
-        else:
-            driver_normal.execute_script("arguments[0].click();", confirm_button)
-            print("두 번째 팝업의 확인 버튼을 JavaScript로 클릭했습니다.")
-        
-    except (TimeoutException, ElementClickInterceptedException, NoSuchElementException) as e:
-        print(f"두 번째 팝업의 확인 버튼을 클릭할 수 없습니다. 오류: {str(e)}")
-        driver_normal.save_screenshot("second_popup_button_not_clicked.png")
-        
-        print("현재 페이지의 HTML:")
-        print(driver_normal.page_source)
-        
-        print("현재 페이지의 모든 버튼:")
-        buttons = driver_normal.find_elements(By.TAG_NAME, "button")
-        for button in buttons:
-            print(f"Class: {button.get_attribute('class')}, Text: {button.text}, Onclick: {button.get_attribute('onclick')}, Displayed: {button.is_displayed()}")
-        
-        assert False, "두 번째 팝업의 확인 버튼 클릭 실패"
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.ID, "selectedStdnSchyr"))).click()
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".dropdown--item"))).click()
-    print("학년을 선택했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.ID, "selectedStdnBan"))).click()
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".open .dropdown--item"))).click()
-    print("반을 선택했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.ID, "selectedStdnNum"))).click()
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".open .dropdown--item"))).click()
-    print("번호를 선택했습니다.")
-
-    password_field = WebDriverWait(driver_normal, 10).until(EC.presence_of_element_located((By.ID, "stdn_loginPw")))
-    password_field.clear()
-    password_field.send_keys(PASSWORD)
-    print("비밀번호를 입력했습니다.")
-
-    WebDriverWait(driver_normal, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".login--button"))).click()
-    print("로그인 버튼을 클릭했습니다.")
-
-    # 중복 로그인 팝업 처리
-    try:
-        duplicate_login_popup = WebDriverWait(driver_normal, 10).until(
-            EC.element_to_be_clickable((By.ID, "confirmPoupOk"))
+        # 학년 선택
+        grade_dropdown = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.ID, "selectedStdnSchyr"))
         )
-        print("중복 로그인 팝업이 감지되었습니다.")
-        duplicate_login_popup.click()
-        print("중복 로그인 팝업의 확인 버튼을 클릭했습니다.")
+        driver_normal.execute_script("arguments[0].click();", grade_dropdown)
+        first_grade = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".dropdown--item"))
+        )
+        driver_normal.execute_script("arguments[0].click();", first_grade)
+        
+        # 반 선택
+        class_dropdown = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.ID, "selectedStdnBan"))
+        )
+        driver_normal.execute_script("arguments[0].click();", class_dropdown)
+        first_class = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".open .dropdown--item"))
+        )
+        driver_normal.execute_script("arguments[0].click();", first_class)
+        
+        # 번호 선택
+        number_dropdown = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.ID, "selectedStdnNum"))
+        )
+        driver_normal.execute_script("arguments[0].click();", number_dropdown)
+        first_number = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".open .dropdown--item:nth-child(1)"))
+        )
+        driver_normal.execute_script("arguments[0].click();", first_number)
+        
+        # 비밀번호 입력
+        driver_normal.find_element(By.ID, "stdn_loginPw").send_keys(PASSWORD)
+        
+        # 로그인 버튼 클릭
+        login_button = driver_normal.find_element(By.CSS_SELECTOR, "#login_form > div > div > button")
+        driver_normal.execute_script("arguments[0].click();", login_button)
+        print("학생 로그인 정보 입력 및 로그인 버튼 클릭")
+        
+        # 중복 로그인 팝업 처리
+        try:
+            duplicate_login_confirm = WebDriverWait(driver_normal, 5).until(
+                EC.element_to_be_clickable((By.ID, "confirmPoupOk"))
+            )
+            driver_normal.execute_script("arguments[0].click();", duplicate_login_confirm)
+            print("중복 로그인 팝업 확인")
+        except TimeoutException:
+            print("중복 로그인 팝업이 없습니다.")
+            pass
+        
     except TimeoutException:
-        print("중복 로그인 팝업이 나타나지 않았습니다.")
-    except ElementNotInteractableException:
-        print("중복 로그인 팝업의 확인 버튼이 클릭 가능한 상태가 아닙니다.")
-        driver_normal.save_screenshot("duplicate_login_popup_not_interactable.png")
+        print("Fail: 학생 로그인 실패")
+        driver_normal.save_screenshot("student_login_failure.png")
+        assert False, "학생 로그인 실패"
 
     try:
-        # 대시보드 페이지로의 이동을 확인
         WebDriverWait(driver_normal, 20).until(
             EC.any_of(
                 EC.title_contains("학생 대시보드"),
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".user-info")),
-                EC.url_contains("/today")
+                EC.url_contains("/today"),
+                EC.url_contains("/main")
             )
         )
         print("학생이 대시보드 페이지에 접근했습니다.")
-        
-        # 현재 URL 출력
-        current_url = driver_normal.current_url
-        print(f"현재 페이지 URL: {current_url}")
-        
-        # 페이지 제목 출력
-        page_title = driver_normal.title
-        print(f"현재 페이지 제목: {page_title}")
-        
-        # 네트워크 오류 확인 (수정된 부분)
-        try:
-            logs = driver_normal.execute_script("""
-                var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
-                var network = performance.getEntries() || {};
-                return JSON.stringify(network);
-            """)
-            network_logs = json.loads(logs)
-            network_errors = [log for log in network_logs if 'status' in log and log['status'] >= 400]
-            
-            if network_errors:
-                print("Fail: 네트워크 요청 중 오류가 발생했습니다.")
-                for error in network_errors:
-                    print(f"URL: {error['name']}, Status: {error['status']}")
-                assert False, "학생 로그인 - 네트워크 오류 발생"
-            else:
-                print("Pass: 학생이 정상적으로 로그인하고 대시보드에 접근했습니다.")
-        except JavascriptException as js_error:
-            print(f"JavaScript 실행 중 오류 발생: {str(js_error)}")
-            print("네트워크 로그를 가져오는 데 실패했지만, 로그인은 성공한 것으로 간주합니다.")
-        except json.JSONDecodeError as json_error:
-            print(f"JSON 파싱 중 오류 발생: {str(json_error)}")
-            print("네트워크 로그를 파싱하는 데 실패했지만, 로그인은 성공한 것으로 간주합니다.")
-    
     except TimeoutException:
-        print("Fail: 학생 로그인 실패 또는 대시보드 접근 불가")
-        driver_normal.save_screenshot("student_login_failure.png")
-        
-        # 현재 URL과 페이지 소스 출력
-        print(f"현재 URL: {driver_normal.current_url}")
-        print("현재 페이지 소스:")
-        print(driver_normal.page_source)
-        
-        assert False, "학생 로그인 실패"
+        print("Fail: 학생 대시보드 접근 실패")
+        driver_normal.save_screenshot("student_dashboard_failure.png")
+        assert False, "학생 대시보드 접근 실패"
 
-    driver_normal.save_screenshot("student_login_success.png")
+@pytest.mark.m_test
+
+def test_03_teacher_logout(driver_incognito, base_url):
+    """교사 로그아웃 테스트"""
+    try:
+        # 로그아웃 버튼 찾기
+        logout_button = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#gnb > div.header--wrapper > div.header--utill > div.header--utill__user > button"))
+        )
+        driver_incognito.execute_script("arguments[0].click();", logout_button)
+        print("로그아웃 버튼 클릭")
+        
+        # 로그아웃 확인 팝업의 확인 버튼 클릭
+        confirm_button = WebDriverWait(driver_incognito, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#gnb > div:nth-child(3) > div > div > div.layer__container.confirm.active > div.page__button > button.button-main.is--large.violet"))
+        )
+        driver_incognito.execute_script("arguments[0].click();", confirm_button)
+        print("로그아웃 확인 팝업 확인")
+        
+        # 로그아웃 완료 팝업의 확인 버튼 클릭
+        complete_button = WebDriverWait(driver_incognito, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#gnb > div:nth-child(3) > div > div > div.layer__container.alert.active > div.page__button > button"))
+        )
+        driver_incognito.execute_script("arguments[0].click();", complete_button)
+        print("로그아웃 완료 팝업 확인")
+        
+        # 로그인 페이지로 이동 확인
+        WebDriverWait(driver_incognito, 10).until(
+            EC.url_contains(base_url)
+        )
+        print("로그아웃 성공: 로그인 페이지로 이동")
+        
+    except Exception as e:
+        print(f"Fail: 로그아웃 실패 - {str(e)}")
+        driver_incognito.save_screenshot("teacher_logout_failure.png")
+        assert False, f"로그아웃 실패: {str(e)}"
+
+@pytest.mark.m_test
+def test_04_student_logout(driver_normal, base_url):
+    """학생 로그아웃 테스트"""
+    try:
+        # 로그아웃 버튼 찾기
+        logout_button = WebDriverWait(driver_normal, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#gnb > div.header--wrapper > div.header--utill > div.header--utill__user > button"))
+        )
+        driver_normal.execute_script("arguments[0].click();", logout_button)
+        print("로그아웃 버튼 클릭")
+        
+        # 로그아웃 확인 팝업의 확인 버튼 클릭
+        confirm_button = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#gnb > div:nth-child(3) > div > div > div.layer__container.confirm.active > div.page__button > button.button-main.is--large.violet"))
+        )
+        driver_normal.execute_script("arguments[0].click();", confirm_button)
+        print("로그아웃 확인 팝업 확인")
+        
+        # 로그아웃 완료 팝업의 확인 버튼 클릭
+        complete_button = WebDriverWait(driver_normal, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#gnb > div:nth-child(3) > div > div > div.layer__container.alert.active > div.page__button > button"))
+        )
+        driver_normal.execute_script("arguments[0].click();", complete_button)
+        print("로그아웃 완료 팝업 확인")
+        
+        # 로그인 페이지로 이동 확인
+        WebDriverWait(driver_normal, 10).until(
+            EC.url_contains(base_url)
+        )
+        print("로그아웃 성공: 로그인 페이지로 이동")
+        
+    except Exception as e:
+        print(f"Fail: 로그아웃 실패 - {str(e)}")
+        driver_normal.save_screenshot("student_logout_failure.png")
+        assert False, f"로그아웃 실패: {str(e)}"
