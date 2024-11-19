@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="test commit" />
+    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="test commit">
+      <change afterPath="$PROJECT_DIR$/otp_failure.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/popup_click_failure.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts sample/sample.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/teacher_logout_failure.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_01_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_01_e_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_02_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_02_e_login.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,7 +64,7 @@
     &quot;Python.test-selenium.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -203,7 +211,31 @@
       <option name="project" value="LOCAL" />
       <updated>1730874919255</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="test commit">
+      <option name="closed" value="true" />
+      <created>1730875299838</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1730875299838</updated>
+    </task>
+    <task id="LOCAL-00017" summary="test commit">
+      <option name="closed" value="true" />
+      <created>1731998759215</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1731998759215</updated>
+    </task>
+    <task id="LOCAL-00018" summary="test commit">
+      <option name="closed" value="true" />
+      <created>1731999853414</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1731999853414</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
