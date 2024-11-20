@@ -97,7 +97,7 @@ def test_01_teacher_login(driver_incognito, login_data):
             print("인증번호 입력 및 확인 버튼 클릭")
         else:
             print("OTP 입력 창이 없어 넘어갑니다.")
-    except TimeoutException:   
+    except TimeoutException:
         print("Fail: 인증번호 입력 또는 확인 버튼 클릭 실패")
         driver_incognito.save_screenshot("otp_failure.png")
         # assert False, "인증번호 입력 또는 확인 버튼 클릭 실패"
