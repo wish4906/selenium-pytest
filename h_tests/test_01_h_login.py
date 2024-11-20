@@ -37,7 +37,7 @@ def test_01_teacher_login(driver_incognito, login_data):
             else:
                 print("시스템 공지 팝업 닫기 버튼 클릭 하지 않음.")
 
-        else:
+        else: #Git push test
             print("팝업 없음 1111111")
 
     except TimeoutException:
