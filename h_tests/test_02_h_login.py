@@ -58,8 +58,7 @@ def test_05_teacher_login(driver_incognito, login_data):
     try:
         WebDriverWait(driver_incognito, 10).until(
             EC.any_of(
-                EC.url_contains("/today"),
-                EC.url_contains("/main")
+                EC.url_contains("/today")
             )
         )
         print("교사가 대시보드 페이지에 접근했습니다.")
@@ -191,10 +190,7 @@ def test_06_student_login(driver_normal, login_data):
     try:
         WebDriverWait(driver_normal, 20).until(
             EC.any_of(
-                EC.title_contains("학생 대시보드"),
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".user-info")),
-                EC.url_contains("/today"),
-                EC.url_contains("/main")
             )
         )
         print("학생이 대시보드 페이지에 접근했습니다.")

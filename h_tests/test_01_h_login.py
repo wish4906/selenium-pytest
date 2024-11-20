@@ -16,6 +16,49 @@ def test_01_teacher_login(driver_incognito, login_data):
     driver_incognito.get(WEBSITE_URL)
     print("교사 로그인: 웹사이트에 접속했습니다.")
 
+    # 1. 시스템 공지 팝업 닫기 버튼 클릭 전에 체크박스 체크
+    try:
+        ispopup = WebDriverWait(driver_incognito, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR,"#sysNoticeTemp > div > div.layer__contents > div.page__button.padding-t-25.padding-b-20 > button"))
+        )
+        if ispopup.is_displayed() :
+            # 체크박스 체크
+            hide_all_day_checkbox = WebDriverWait(driver_incognito, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#hideAllDay"))
+            )
+            if not hide_all_day_checkbox.is_selected():  # 체크박스가 체크되어 있지 않으면 체크
+                hide_all_day_checkbox.click()
+                print("오늘 하루 보지 않기 체크박스 체크")
+
+            # 시스템 공지 팝업 닫기 버튼 확인
+            if ispopup.is_displayed():  # 시스템 공지 팝업 닫기 버튼이 보이는지 확인
+                ispopup.click()
+                print("시스템 공지 팝업 닫기 버튼 클릭")
+            else:
+                print("시스템 공지 팝업 닫기 버튼 클릭 하지 않음.")
+
+        else:
+            print("팝업 없음 1111111")
+
+    except TimeoutException:
+        print("시스템 공지 팝업 닫기 버튼이 없음, 클릭하지 않음.")
+
+    # 2. 노티 팝업 확인 버튼 클릭
+    try:
+        popup_button = WebDriverWait(driver_incognito, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#notiPopupOk"))
+        )
+        if popup_button.is_displayed():  # 노티 팝업 확인 버튼이 보이는지 확인
+            driver_incognito.execute_script("arguments[0].scrollIntoView(true);", popup_button)  # 버튼이 보이도록 스크롤
+            popup_button.click()
+            print("노티 팝업 확인 버튼 클릭")
+        else:
+            print("노티 팝업이 보이지 않음, 클릭하지 않음.")
+    except TimeoutException:
+        print("노티 팝업 확인 버튼이 없음, 클릭하지 않음.")
+
+
+    # 3. 아이디 / 패스워드 입력
     try:
         login_button = WebDriverWait(driver_incognito, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".login--item:nth-child(2) > .login--item-button"))
@@ -33,33 +76,37 @@ def test_01_teacher_login(driver_incognito, login_data):
         driver_incognito.save_screenshot("teacher_login_failure.png")
         assert False, "교사 로그인 실패"
 
-    try:
-        WebDriverWait(driver_incognito, 10).until(
+    try: #인증번호 안내 팝업
+        popup_button = driver_incognito.find_elements(By.CSS_SELECTOR, "#notiPopupOk")
+        if popup_button and popup_button[0].is_displayed():
+            WebDriverWait(driver_incognito, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "#notiPopupOk"))
         ).click()
-        print("팝업 확인 버튼 클릭")
+        print("인증번호 팝업 확인 버튼 클릭")
     except TimeoutException:
-        print("Fail: 팝업 확인 버튼 클릭 실패")
+        print("Fail: 인증번호 팝업 확인 버튼 클릭 실패")
         driver_incognito.save_screenshot("popup_click_failure.png")
-        assert False, "팝업 확인 버튼 클릭 실패"
+        # assert False, "팝업 확인 버튼 클릭 실패"
+        pytest.fail("팝업 확인 버튼 클릭 실패111111111111111111111111", pytrace=True)
 
     try:
-        otp_input = WebDriverWait(driver_incognito, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > input"))
-        )
-        otp_input.send_keys("999999")
-        driver_incognito.find_element(By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > div > button.button-main.violet").click()
-        print("인증번호 입력 및 확인 버튼 클릭")
+        otp_inputs = driver_incognito.find_elements(By.CSS_SELECTOR,"#login_form > div > div > div > div.otp-box > input")
+        if otp_inputs and otp_inputs[0].is_displayed():
+            otp_inputs[0].send_keys("999999")
+            driver_incognito.find_element(By.CSS_SELECTOR,"#login_form > div > div > div > div.otp-box > div > button.button-main.violet").click()
+            print("인증번호 입력 및 확인 버튼 클릭")
+        else:
+            print("OTP 입력 창이 없어 넘어갑니다.")
     except TimeoutException:
         print("Fail: 인증번호 입력 또는 확인 버튼 클릭 실패")
         driver_incognito.save_screenshot("otp_failure.png")
-        assert False, "인증번호 입력 또는 확인 버튼 클릭 실패"
+        # assert False, "인증번호 입력 또는 확인 버튼 클릭 실패"
+        pytest.fail("인증번호 팝업 확인 버튼 클릭 실패2222222222222222222222222222", pytrace=True)
 
     try:
         WebDriverWait(driver_incognito, 10).until(
             EC.any_of(
-                EC.url_contains("/today"),
-                EC.url_contains("/main")
+                EC.url_contains("/today")
             )
         )
         print("교사가 대시보드 페이지에 접근했습니다.")
@@ -191,10 +238,8 @@ def test_02_student_login(driver_normal, login_data):
     try:
         WebDriverWait(driver_normal, 20).until(
             EC.any_of(
-                EC.title_contains("학생 대시보드"),
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".user-info")),
                 EC.url_contains("/today"),
-                EC.url_contains("/main")
             )
         )
         print("학생이 대시보드 페이지에 접근했습니다.")

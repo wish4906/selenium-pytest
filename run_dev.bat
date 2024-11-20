@@ -1,7 +1,6 @@
 @echo off
 chcp 65001
-echo DEV 환경 테스트 실행 시작...
-
+echo DEV 환경 테스트 실행 시작..
 echo 초등 테스트 실행 중...
 start cmd /k "cd /d %~dp0 && set "TEST_ENV=dev" && pytest test_e.py -v --html=reports/dev/elementary_report_%date:~0,4%%date:~5,2%%date:~8,2%.html && pause"
 
