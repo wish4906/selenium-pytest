@@ -19,21 +19,23 @@ def test_01_teacher_login(driver_incognito, login_data):
 
 # 1. 시스템 공지 팝업 닫기 버튼 클릭 전에 체크박스 체크
     try:
-        # 체크박스 체크
-        hide_all_day_checkbox = WebDriverWait(driver_incognito, 5).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#hideAllDay"))
-        )
-        if not hide_all_day_checkbox.is_selected():  # 체크박스가 체크되어 있지 않으면 체크
-            hide_all_day_checkbox.click()
-            print("오늘 하루 보지 않기 체크박스 체크")
-
         # 시스템 공지 팝업 닫기 버튼 확인
         sys_notice_button = WebDriverWait(driver_incognito, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "#sysNoticeTemp > div > div.layer__contents > div.page__button.padding-t-25.padding-b-20 > button"))
         )
         if sys_notice_button.is_displayed():  # 시스템 공지 팝업 닫기 버튼이 보이는지 확인
+
+            # 체크박스 체크
+            hide_all_day_checkbox = WebDriverWait(driver_incognito, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#hideAllDay"))
+            )
+            if not hide_all_day_checkbox.is_selected():  # 체크박스가 체크되어 있지 않으면 체크
+                hide_all_day_checkbox.click()
+                print("오늘 하루 보지 않기 체크박스 체크")
+
             sys_notice_button.click()
             print("시스템 공지 팝업 닫기 버튼 클릭")
+
         else:
             print("시스템 공지 팝업이 보이지 않음, 클릭하지 않음.")
     except TimeoutException:
@@ -72,8 +74,21 @@ def test_01_teacher_login(driver_incognito, login_data):
         driver_incognito.save_screenshot("teacher_login_failure.png")
         assert False, "교사 로그인 실패"
 
-    
-    # 4. 인증번호 입력 처리
+    # 2. 인증번호 발송 확인 팝업의 확인 버튼 클릭
+    try:
+        confirm_button = WebDriverWait(driver_incognito, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#notiPopupOk"))  # 인증번호 발송 확인 버튼
+        )
+        if confirm_button.is_displayed():  # 인증번호 발송 확인 버튼이 보이는지 확인
+            driver_incognito.execute_script("arguments[0].scrollIntoView(true);", confirm_button)  # 버튼이 보이도록 스크롤
+            confirm_button.click()  # JavaScript로 버튼 클릭
+            print("인증번호 발송 확인 버튼 클릭")
+        else:
+            print("인증번호 발송 확인 버튼이 보이지 않음, 클릭하지 않음.")
+    except TimeoutException:
+        print("인증번호 발송 확인 버튼이 없음, 클릭하지 않음.")
+
+    # 3. 인증번호 입력 처리
     try:
         otp_input = WebDriverWait(driver_incognito, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > input"))
@@ -82,17 +97,6 @@ def test_01_teacher_login(driver_incognito, login_data):
             otp_input.send_keys("999999")
             driver_incognito.find_element(By.CSS_SELECTOR, "#login_form > div > div > div > div.otp-box > div > button.button-main.violet").click()
             print("인증번호 입력 및 확인 버튼 클릭")
-            
-            # 인증번호 발송 확인 팝업의 확인 버튼 클릭
-            confirm_button = WebDriverWait(driver_incognito, 5).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "#notiPopupOk"))
-            )
-            if confirm_button.is_displayed():  # 인증번호 발송 확인 버튼이 보이는지 확인
-                driver_incognito.execute_script("arguments[0].scrollIntoView(true);", confirm_button)  # 버튼이 보이도록 스크롤
-                confirm_button.click()
-                print("인증번호 발송 확인 버튼 클릭")
-            else:
-                print("인증번호 발송 확인 버튼이 보이지 않음, 클릭하지 않음.")
         else:
             print("인증번호 입력 필드가 보이지 않음, 입력하지 않음.")
     except TimeoutException:
@@ -116,6 +120,44 @@ def test_02_student_login(driver_normal, login_data):
     WEBSITE_URL, STUDENT_ID, STUDENT_NUM, PASSWORD = login_data
     driver_normal.get(WEBSITE_URL)
     print("학생 로그인: 웹사이트에 접속했습니다.")
+
+# 1. 시스템 공지 팝업 닫기 버튼 클릭 전에 체크박스 체크
+    try:
+        # 시스템 공지 팝업 닫기 버튼 확인
+        sys_notice_button = WebDriverWait(driver_normal, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#sysNoticeTemp > div > div.layer__contents > div.page__button.padding-t-25.padding-b-20 > button"))
+        )
+        if sys_notice_button.is_displayed():  # 시스템 공지 팝업 닫기 버튼이 보이는지 확인
+
+            # 체크박스 체크
+            hide_all_day_checkbox = WebDriverWait(driver_normal, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#hideAllDay"))
+            )
+            if not hide_all_day_checkbox.is_selected():  # 체크박스가 체크되어 있지 않으면 체크
+                hide_all_day_checkbox.click()
+                print("오늘 하루 보지 않기 체크박스 체크")
+
+            sys_notice_button.click()
+            print("시스템 공지 팝업 닫기 버튼 클릭")
+
+        else:
+            print("시스템 공지 팝업이 보이지 않음, 클릭하지 않음.")
+    except TimeoutException:
+        print("시스템 공지 팝업 닫기 버튼이 없음, 클릭하지 않음.")
+
+    # 2. 노티 팝업 확인 버튼 클릭
+    try:
+        popup_button = WebDriverWait(driver_normal, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#notiPopupOk"))
+        )
+        if popup_button.is_displayed():  # 노티 팝업 확인 버튼이 보이는지 확인
+            driver_normal.execute_script("arguments[0].scrollIntoView(true);", popup_button)  # 버튼이 보이도록 스크롤
+            popup_button.click()
+            print("노티 팝업 확인 버튼 클릭")
+        else:
+            print("노티 팝업이 보이지 않음, 클릭하지 않음.")
+    except TimeoutException:
+        print("노티 팝업 확인 버튼이 없음, 클릭하지 않음.")
     
     try:
         # 로그인 버튼 클릭
