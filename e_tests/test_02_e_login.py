@@ -10,7 +10,7 @@ def click_element(driver, element):
     """JavaScript를 사용하여 요소 클릭"""
     driver.execute_script("arguments[0].click();", element)
 
-def test_05_teacher_login(driver_incognito, login_data):
+def test_005_teacher_login(driver_incognito, login_data):
     """교사 로그인 테스트"""
     WEBSITE_URL, TEACHER_ID, PASSWORD = login_data
     driver_incognito.get(WEBSITE_URL)
@@ -114,7 +114,7 @@ def test_05_teacher_login(driver_incognito, login_data):
 
 @pytest.mark.e_test
 
-def test_06_student_login(driver_normal, login_data):
+def test_006_student_login(driver_normal, login_data):
     """학생 로그인 테스트"""
     WEBSITE_URL, STUDENT_ID, STUDENT_NUM, PASSWORD = login_data
     driver_normal.get(WEBSITE_URL)

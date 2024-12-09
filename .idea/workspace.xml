@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="test commit">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/selenium-pytest.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/selenium-pytest.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/popup_click_failure.png" beforeDir="false" afterPath="$PROJECT_DIR$/popup_click_failure.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teacher_logout_failure.png" beforeDir="false" afterPath="$PROJECT_DIR$/teacher_logout_failure.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/live_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/live_config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732149673942</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="test commit">
+      <option name="closed" value="true" />
+      <created>1733708142977</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1733708142977</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -11,7 +11,7 @@ def click_element(driver, element):
     driver.execute_script("arguments[0].click();", element)
 
 
-def test_01_teacher_login(driver_incognito, login_data):
+def test_001_teacher_login(driver_incognito, login_data):
     """교사 로그인 테스트"""
     WEBSITE_URL, TEACHER_ID, PASSWORD = login_data
     driver_incognito.get(WEBSITE_URL)
@@ -115,7 +115,7 @@ def test_01_teacher_login(driver_incognito, login_data):
 
 @pytest.mark.e_test
 
-def test_02_student_login(driver_normal, login_data):
+def test_002_student_login(driver_normal, login_data):
     """학생 로그인 테스트"""
     WEBSITE_URL, STUDENT_ID, STUDENT_NUM, PASSWORD = login_data
     driver_normal.get(WEBSITE_URL)
@@ -287,7 +287,7 @@ def test_02_student_login(driver_normal, login_data):
 
 @pytest.mark.e_test
 
-def test_03_teacher_logout(driver_incognito, base_url):
+def test_003_teacher_logout(driver_incognito, base_url):
     """교사 로그아웃 테스트"""
     try:
         # 로그아웃 버튼 찾기
@@ -323,7 +323,7 @@ def test_03_teacher_logout(driver_incognito, base_url):
         assert False, f"로그아웃 실패: {str(e)}"
 
 @pytest.mark.e_test
-def test_04_student_logout(driver_normal, base_url):
+def test_004_student_logout(driver_normal, base_url):
     """학생 로그아웃 테스트"""
     try:
         # 로그아웃 버튼 찾기

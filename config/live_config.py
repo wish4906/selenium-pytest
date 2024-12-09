@@ -6,15 +6,15 @@ SELENIUM_URLS = {
 
 LOGIN_DATA = {
     'e_test': {
-        'teacher': ("https://hi.goe.go.kr/", "qae2", "2w2w2w2w2w"),
-        'student': ("https://hi.goe.go.kr/", "qae", "student_num1", "2w2w2w2w2w")
+        'teacher': ("https://hi.goe.go.kr/", "seleniumeclass1", "2w2w2w2w2w"),
+        'student': ("https://hi.goe.go.kr/", "seleniume", "student_num1", "2w2w2w2w2w")
     },
     'm_test': {
-        'teacher': ("https://hi.goe.go.kr/", "jw01", "2w2w2w2w2w"),
-        'student': ("https://hi.goe.go.kr/", "제이디자인중", "student_num2", "2w2w2w2w2w")
+        'teacher': ("https://hi.goe.go.kr/", "seleniummclass1", "2w2w2w2w2w"),
+        'student': ("https://hi.goe.go.kr/", "seleniumm", "student_num2", "2w2w2w2w2w")
     },
     'h_test': {
-        'teacher': ("https://hi.goe.go.kr/", "watest11", "2w2w2w2w2w"),
-        'student': ("https://hi.goe.go.kr/", "아이1고등학교", "student_num3", "2w2w2w2w2w")
+        'teacher': ("https://hi.goe.go.kr/", "seleniumhclass1", "2w2w2w2w2w"),
+        'student': ("https://hi.goe.go.kr/", "seleniumh", "student_num3", "2w2w2w2w2w")
     }
 }
