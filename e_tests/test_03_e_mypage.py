@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
+import os
+import random
 
 
 @pytest.mark.e_test
@@ -214,3 +216,130 @@ def test_010_teacher_modify(driver_incognito, base_url):
         print(f"Fail: 회원정보 수정 실패 - {str(e)}")
         driver_incognito.save_screenshot("teacher_modify_failure.png")
         assert False, f"회원정보 수정 실패: {str(e)}"
+
+@pytest.mark.e_test
+def test_011_teacher_profile_picture(driver_incognito, base_url):
+    """프로필 사진 변경 테스트"""
+
+    try:
+        # 기존 프로필 사진 요소 가져오기
+        existing_profile_picture = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#modify > div > div > div.mypage--left > div.mypage--left__profile > div > p"))  # 기존 프로필 사진의 CSS 선택자
+        )
+        
+        # 기존 프로필 사진 상태 확인
+        existing_image_class = existing_profile_picture.get_attribute("class")
+        print(f"기존 프로필 사진 클래스: {existing_image_class}")
+
+        # 기존 이미지가 없을 경우
+        if "avatar-no-image" in existing_image_class:
+            existing_image_number = None
+            print("기존 프로필 사진이 없습니다.")
+        else:
+            # 기존 프로필 사진 URL 가져오기
+            existing_image_style = existing_profile_picture.get_attribute("style")
+            existing_image_url = existing_image_style.split("url(")[1].split(")")[0].replace("&quot;", "")  # 기존 이미지 URL
+            existing_image_number = existing_image_url.split("/")[-1].split(".")[0]  # URL에서 숫자 부분 추출
+            print(f"기존 프로필 사진 URL: {existing_image_url}, 숫자: {existing_image_number}")
+
+        # 프로필 사진 선택 버튼 클릭
+        profile_picture_button = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#modify > div > div > div.mypage--left > div.mypage--left__profile > div > button > p"))
+        )
+        driver_incognito.execute_script("arguments[0].click();", profile_picture_button)
+        print("프로필 사진 선택 버튼 클릭")
+
+        # 팝업 확인
+        try:
+            # 팝업이 나타나는지 확인
+            popup = WebDriverWait(driver_incognito, 10).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "#contentsContainer > div.layer-area.modal-area.modal-confirm__popup.ele_ui > div.layer__container"))
+            )
+            print("팝업이 나타났습니다.")
+
+            # 확인 버튼 클릭 가능할 때까지 기다리기
+            confirm_button = WebDriverWait(driver_incognito, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CSS_SELECTOR, "#confirmPoupOk")
+                )
+            )
+            driver_incognito.execute_script("arguments[0].click();", confirm_button)
+            print("확인 버튼 클릭")
+
+            # 팝업이 닫힐 때까지 대기
+            WebDriverWait(driver_incognito, 10).until(
+                EC.invisibility_of_element_located(
+                    (By.CSS_SELECTOR, "#contentsContainer > div.layer-area.modal-area.modal-confirm__popup.ele_ui > div.layer__container")
+                )
+            )
+            print("팝업이 닫혔습니다.")
+
+            # 프로필 아이콘 다시 클릭
+            profile_picture_button = WebDriverWait(driver_incognito, 10).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "#modify > div > div > div.mypage--left > div.mypage--left__profile > div > button > p"))
+            )
+            driver_incognito.execute_script("arguments[0].click();", profile_picture_button)
+            print("프로필 사진 선택 버튼 클릭")
+
+        except TimeoutException:
+            print("팝업이 나타나지 않았습니다. 계속 진행합니다.")
+
+        # 파일 경로 설정
+        file_directory = r"C:\Users\Admin\PycharmProjects\selenium-pytest\inputfile\profile"
+        files = [f for f in os.listdir(file_directory) if f.endswith(('.jpg', '.jpeg', '.png'))]  # 이미지 파일 목록 가져오기
+
+        # 랜덤으로 파일 선택
+        selected_file = random.choice(files)
+        file_path = os.path.join(file_directory, selected_file)
+        print(f"선택된 이미지 파일: {file_path}")
+
+        # 파일 선택 대화상자에서 이미지 파일 선택
+        file_input = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "input[type='file']"))  # 파일 입력 필드 선택
+        )
+        file_input.send_keys(file_path)  # 랜덤으로 선택된 이미지 파일 경로 입력
+        print("이미지 파일 선택 완료")
+
+        # 변경된 프로필 사진 요소 가져오기
+        new_profile_picture = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#modify > div > div > div.mypage--left > div.mypage--left__profile > div > p"))  # 변경된 프로필 사진의 CSS 선택자
+        )
+        
+        # 변경된 프로필 사진이 로드될 때까지 대기
+        WebDriverWait(driver_incognito, 10).until(
+            lambda driver: new_profile_picture.get_attribute("style") != ""  # 스타일 속성이 비어있지 않을 때까지 대기
+        )
+
+        # 변경된 프로필 사진 상태 확인
+        new_image_class = new_profile_picture.get_attribute("class")
+        print(f"변경된 프로필 사진 클래스: {new_image_class}")
+
+        # 변경된 이미지가 없을 경우
+        if "avatar-no-image" in new_image_class:
+            new_image_number = None
+            print("변경된 프로필 사진이 없습니다.")
+        else:
+            # 변경된 프로필 사진 URL 가져오기
+            new_image_style = new_profile_picture.get_attribute("style")
+            new_image_url = new_image_style.split("url(")[1].split(")")[0].replace("&quot;", "")  # 변경된 이미지 URL
+            new_image_number = new_image_url.split("/")[-1].split(".")[0]  # URL에서 숫자 부분 추출
+            print(f"변경된 프로필 사진 URL: {new_image_url}, 숫자: {new_image_number}")
+
+        # 기존 이미지 숫자와 변경된 이미지 숫자 비교
+        if existing_image_number is not None and new_image_number is not None and existing_image_number != new_image_number:
+            print("프로필 사진이 성공적으로 변경되었습니다.")
+        elif existing_image_number is None and new_image_number is not None:
+            print("프로필 사진이 성공적으로 추가되었습니다.")
+        else:
+            assert False, "프로필 사진이 변경되지 않았습니다."
+
+    except Exception as e:
+        print(f"Fail: 프로필 사진 변경 실패 - {str(e)}")
+        driver_incognito.save_screenshot("teacher_profile_picture_failure.png")
+        assert False, f"프로필 사진 변경 실패: {str(e)}"
