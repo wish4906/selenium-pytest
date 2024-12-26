@@ -102,6 +102,27 @@ def test_001_teacher_login(driver_incognito, login_data):
     except TimeoutException:
         print("인증번호 입력 필드가 없음, 입력하지 않음.")
 
+    # 4. 중복 로그인 팝업 처리
+    try:
+        # 중복 로그인 팝업 확인
+        multi_login_popup = WebDriverWait(driver_incognito, 5).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "#teacher-multi-login > div.layer__container"))
+        )
+        print("중복 로그인 팝업이 나타났습니다.")
+
+        # 다른 기기 로그아웃 라디오 버튼 선택
+        force_logout_radio = driver_incognito.find_element(By.CSS_SELECTOR, "#force-logout")
+        force_logout_radio.click()
+        print("다른 기기 로그아웃 라디오 버튼 선택")
+
+        # 로그인 버튼 클릭
+        login_button = driver_incognito.find_element(By.CSS_SELECTOR, "#teacher-multi-login > div.layer__container > div.page__button > button.button-main.violet.width-150")
+        login_button.click()
+        print("로그인 버튼 클릭")
+
+    except TimeoutException:
+        print("중복 로그인 팝업이 나타나지 않았습니다. 대시보드 페이지 접근 확인합니다.")    
+
     # 대시보드 페이지 접근 확인
     try:
         WebDriverWait(driver_incognito, 10).until(

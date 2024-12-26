@@ -288,13 +288,14 @@ def test_011_teacher_profile_picture(driver_incognito, base_url):
         except TimeoutException:
             print("팝업이 나타나지 않았습니다. 계속 진행합니다.")
 
-        # 파일 경로 설정
-        file_directory = r"C:\Users\Admin\PycharmProjects\selenium-pytest\inputfile\profile"
-        files = [f for f in os.listdir(file_directory) if f.endswith(('.jpg', '.jpeg', '.png'))]  # 이미지 파일 목록 가져오기
+        # 파일 경로 설정 (상대 경로로 변경)
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일의 디렉토리 경로
+        inputfile_directory = os.path.join(current_dir, '..', 'inputfile','profile')  # inputfile 폴더의 상대 경로
+        files = [f for f in os.listdir(inputfile_directory) if f.endswith(('.jpg', '.jpeg', '.png'))]  # 이미지 파일 목록 가져오기
 
         # 랜덤으로 파일 선택
         selected_file = random.choice(files)
-        file_path = os.path.join(file_directory, selected_file)
+        file_path = os.path.join(inputfile_directory, selected_file)  # 선택된 파일의 전체 경로
         print(f"선택된 이미지 파일: {file_path}")
 
         # 파일 선택 대화상자에서 이미지 파일 선택

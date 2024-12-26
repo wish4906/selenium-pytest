@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="pip 관련 플러그인 재 설치 후 푸시">
+    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="마이페이지 수정, 테스트 케이스 넘버 수정">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/h_tests/test_01_h_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/h_tests/test_01_h_login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/h_tests/test_02_h_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/h_tests/test_02_h_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_01_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_01_e_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/teacher_profile_picture_failure.png" beforeDir="false" afterPath="$PROJECT_DIR$/teacher_profile_picture_failure.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_script/test_01_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_script/test_01_e_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_script/test_03_e_mypage.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_script/test_03_e_mypage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +40,12 @@
     &quot;assignee&quot;: &quot;wish4906&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/wish4906/selenium-pytest.git",
-    "accountId": "59f07e9b-ba75-4d7d-b3a7-f25d15051dbb"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/wish4906/selenium-pytest.git&quot;,
+    &quot;accountId&quot;: &quot;aef0e03f-9e9e-4eaa-88a5-fb94d1636f6a&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -52,20 +55,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python 테스트.test-selenium.py 내 Python 테스트.executor": "Run",
-    "Python.test-selenium.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/project/selenium-pytest/h_tests",
-    "settings.editor.selected.configurable": "editor.preferences.tabs"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python 테스트.test-selenium.py 내 Python 테스트.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test-selenium.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\project\selenium-pytest\h_tests" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Admin\PycharmProjects\selenium-pytest" />
     </key>
@@ -73,7 +72,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
+        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
       </set>
     </attachedChunks>
   </component>
@@ -257,15 +256,7 @@
       <option name="project" value="LOCAL" />
       <updated>1733727197082</updated>
     </task>
-    <task id="LOCAL-00022" summary="pip 관련 플러그인 재 설치 후 푸시">
-      <option name="closed" value="true" />
-      <created>1735189586789</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1735189586789</updated>
-    </task>
-    <option name="localTasksCounter" value="23" />
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -294,8 +285,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test commit" />
     <MESSAGE value="마이페이지 수정, 테스트 케이스 넘버 수정" />
-    <MESSAGE value="pip 관련 플러그인 재 설치 후 푸시" />
-    <option name="LAST_COMMIT_MESSAGE" value="pip 관련 플러그인 재 설치 후 푸시" />
+    <option name="LAST_COMMIT_MESSAGE" value="마이페이지 수정, 테스트 케이스 넘버 수정" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -303,10 +293,6 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/e_tests/__init__.py</url>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/e_tests/test_03_e_mypage.py</url>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
