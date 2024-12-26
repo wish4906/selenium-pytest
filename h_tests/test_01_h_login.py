@@ -10,7 +10,7 @@ def click_element(driver, element):
     """JavaScript를 사용하여 요소 클릭"""
     driver.execute_script("arguments[0].click();", element)
 
-def test_01_teacher_login(driver_incognito, login_data):
+def test_001_teacher_login(driver_incognito, login_data):
     """교사 로그인 테스트"""
     WEBSITE_URL, TEACHER_ID, PASSWORD = login_data
     driver_incognito.get(WEBSITE_URL)
@@ -103,7 +103,34 @@ def test_01_teacher_login(driver_incognito, login_data):
         # assert False, "인증번호 입력 또는 확인 버튼 클릭 실패"
         pytest.fail("인증번호 팝업 확인 버튼 클릭 실패2222222222222222222222222222", pytrace=True)
 
-    try:
+
+    try: # 중복 로그인 팝업
+        double_login_popup = WebDriverWait(driver_incognito, 5).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, " #teacher-multi-login > div.layer__container > div.page__button > button.button-main.gray.width-150 "))
+        )
+        if double_login_popup.is_displayed():  # 중복 로그인 - 팝업 노출 확인
+            print("중복 로그인 팝업 노출 확인")
+
+            # 다른 기기 로그아웃 버튼 클릭
+            logout_radio_button = WebDriverWait(driver_incognito, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "#teacher-multi-login > div.layer__container > div.layer__contents > div > label:nth-child(2) > div > div" ))
+            )
+            driver_incognito.execute_script("arguments[0].click();", logout_radio_button)
+            print("다른 기기 로그아웃 라디오버튼 클릭")
+
+            # 로그인 버튼 클릭
+            login_button = WebDriverWait(driver_incognito, 5).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "#teacher-multi-login > div.layer__container > div.page__button > button.button-main.violet.width-150"))
+            )
+            login_button.click()
+            print("로그인 버튼 클릭")
+        else:
+            print("중복 로그인 팝업 노출되지 않음.")
+    except TimeoutException:
+        print("다른 기기 로그아웃 라디오버튼, 클릭하지 않음.")
+
+
+    try: # 대시보드 진입
         WebDriverWait(driver_incognito, 10).until(
             EC.any_of(
                 EC.url_contains("/today")
@@ -117,7 +144,7 @@ def test_01_teacher_login(driver_incognito, login_data):
 
 @pytest.mark.h_test
 
-def test_02_student_login(driver_normal, login_data):
+def test_002_student_login(driver_normal, login_data):
     """학생 로그인 테스트"""
     WEBSITE_URL, STUDENT_ID, STUDENT_NUM, PASSWORD = login_data
     driver_normal.get(WEBSITE_URL)
@@ -238,6 +265,7 @@ def test_02_student_login(driver_normal, login_data):
     try:
         WebDriverWait(driver_normal, 20).until(
             EC.any_of(
+                EC.title_contains("학생 대시보드"),
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".user-info")),
                 EC.url_contains("/today"),
             )
@@ -250,7 +278,7 @@ def test_02_student_login(driver_normal, login_data):
 
 @pytest.mark.h_test
 
-def test_03_teacher_logout(driver_incognito, base_url):
+def test_003_teacher_logout(driver_incognito, base_url):
     """교사 로그아웃 테스트"""
     try:
         # 로그아웃 버튼 찾기
@@ -286,7 +314,7 @@ def test_03_teacher_logout(driver_incognito, base_url):
         assert False, f"로그아웃 실패: {str(e)}"
 
 @pytest.mark.h_test
-def test_04_student_logout(driver_normal, base_url):
+def test_004_student_logout(driver_normal, base_url):
     """학생 로그아웃 테스트"""
     try:
         # 로그아웃 버튼 찾기
