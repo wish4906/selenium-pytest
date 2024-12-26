@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="마이페이지 수정, 테스트 케이스 넘버 수정" />
+    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="프로필 사진 변경, 프로필 사진 변경여부 체크">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -250,7 +253,23 @@
       <option name="project" value="LOCAL" />
       <updated>1733727197082</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="프로필 사진 변경, 프로필 사진 변경여부 체크">
+      <option name="closed" value="true" />
+      <created>1733733812120</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1733733812120</updated>
+    </task>
+    <task id="LOCAL-00023" summary="프로필 사진 변경, 프로필 사진 변경여부 체크">
+      <option name="closed" value="true" />
+      <created>1733733840338</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1733733840338</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -279,7 +298,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test commit" />
     <MESSAGE value="마이페이지 수정, 테스트 케이스 넘버 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="마이페이지 수정, 테스트 케이스 넘버 수정" />
+    <MESSAGE value="프로필 사진 변경, 프로필 사진 변경여부 체크" />
+    <option name="LAST_COMMIT_MESSAGE" value="프로필 사진 변경, 프로필 사진 변경여부 체크" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

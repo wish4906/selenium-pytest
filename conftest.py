@@ -17,6 +17,9 @@ def get_test_type_from_file(filename):
     elif 'test_h.py' in filename:
         print("고등 테스트 실행")
         return 'h_tests', config.SELENIUM_URLS['h_test']
+    elif 'test_scripts.py' in filename:
+        print("스크립트 테스트 실행")
+        return 'test_script', config.SELENIUM_URLS['e_test']
     raise ValueError(f"알 수 없는 테스트 파일: {filename}")
 
 def pytest_configure(config):
@@ -45,7 +48,8 @@ def login_data(test_type):
     test_map = {
         'e_tests': 'e_test',
         'm_tests': 'm_test',
-        'h_tests': 'h_test'
+        'h_tests': 'h_test',
+        'test_script': 'e_test'
     }
     return config.LOGIN_DATA[test_map[test_type]]
 

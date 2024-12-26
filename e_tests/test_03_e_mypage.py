@@ -343,3 +343,8 @@ def test_011_teacher_profile_picture(driver_incognito, base_url):
         print(f"Fail: 프로필 사진 변경 실패 - {str(e)}")
         driver_incognito.save_screenshot("teacher_profile_picture_failure.png")
         assert False, f"프로필 사진 변경 실패: {str(e)}"
+
+ #@pytest.mark.e_test
+ #def test_012_teacher_profile_picture(driver_incognito, base_url):
+
+    
