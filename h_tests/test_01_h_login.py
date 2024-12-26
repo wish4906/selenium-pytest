@@ -76,7 +76,7 @@ def test_01_teacher_login(driver_incognito, login_data):
         driver_incognito.save_screenshot("teacher_login_failure.png")
         assert False, "교사 로그인 실패"
 
-    try: #인증번호 안내 팝업
+    try: # 인증번호 안내 팝업
         popup_button = driver_incognito.find_elements(By.CSS_SELECTOR, "#notiPopupOk")
         if popup_button and popup_button[0].is_displayed():
             WebDriverWait(driver_incognito, 10).until(
@@ -89,7 +89,7 @@ def test_01_teacher_login(driver_incognito, login_data):
         # assert False, "팝업 확인 버튼 클릭 실패"
         pytest.fail("팝업 확인 버튼 클릭 실패111111111111111111111111", pytrace=True)
 
-    try:
+    try: # 인증번호 입력
         otp_inputs = driver_incognito.find_elements(By.CSS_SELECTOR,"#login_form > div > div > div > div.otp-box > input")
         if otp_inputs and otp_inputs[0].is_displayed():
             otp_inputs[0].send_keys("999999")
