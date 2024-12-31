@@ -345,7 +345,31 @@ def test_011_teacher_profile_picture(driver_incognito, base_url):
         driver_incognito.save_screenshot("teacher_profile_picture_failure.png")
         assert False, f"프로필 사진 변경 실패: {str(e)}"
 
- #@pytest.mark.e_test
- #def test_012_teacher_profile_picture(driver_incognito, base_url):
+@pytest.mark.e_test
+def test_012_teacher_record(driver_incognito, base_url):
+    """나의 이력 버튼 클릭 및 페이지 접근 확인"""
+    
+    try:
+        # 나의 이력 버튼 클릭
+        mypage_record_button = WebDriverWait(driver_incognito, 10).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#record > div > div > div.mypage--left > div.mypage--left__menubox > div:nth-child(1) > div > a.active")  # 나의 이력 버튼
+            )
+        )
+        driver_incognito.execute_script("arguments[0].click();", mypage_record_button)
+        print("나의 이력 버튼 클릭")
+
+        # 나의 이력 페이지 확인
+        WebDriverWait(driver_incognito, 10).until(
+            EC.url_contains("/v2/mypage/record")  # 나의 이력 페이지 URL 확인
+        )
+        print("나의 이력 페이지에 정상적으로 접근했습니다.")
+
+    except Exception as e:
+        print(f"Fail: 나의 이력 페이지 접근 실패 - {str(e)}")
+        driver_incognito.save_screenshot("mypage_record_failure.png")
+        assert False, f"나의 이력 페이지 접근 실패: {str(e)}"
+
+
 
     

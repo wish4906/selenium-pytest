@@ -2,6 +2,17 @@ import pytest
 import os
 import importlib
 import sys
+import logging
+
+# 로깅 설정 추가
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("test_log.log"),  # 로그 파일 핸들러
+        logging.StreamHandler()  # 콘솔 출력 핸들러
+    ]
+)
 
 ENV = os.getenv('TEST_ENV', 'dev')
 config = importlib.import_module(f'config.{ENV}_config')
