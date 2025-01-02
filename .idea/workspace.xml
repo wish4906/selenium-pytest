@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="프로필 사진 변경, 프로필 사진 변경여부 체크">
+    <list default="true" id="fb8c8114-12c4-497b-b6c5-275be411769e" name="변경" comment="마이페이지 수정, 테스트 케이스 넘버 수정">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_01_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_01_e_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" beforeDir="false" afterPath="$PROJECT_DIR$/e_tests/test_03_e_mypage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher_profile_picture_failure.png" beforeDir="false" afterPath="$PROJECT_DIR$/teacher_profile_picture_failure.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_script/test_01_e_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_script/test_01_e_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_script/test_03_e_mypage.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_script/test_03_e_mypage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,15 +256,7 @@
       <option name="project" value="LOCAL" />
       <updated>1733727197082</updated>
     </task>
-    <task id="LOCAL-00022" summary="프로필 사진 변경, 프로필 사진 변경여부 체크">
-      <option name="closed" value="true" />
-      <created>1735203786692</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1735203786692</updated>
-    </task>
-    <option name="localTasksCounter" value="23" />
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -287,8 +285,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test commit" />
     <MESSAGE value="마이페이지 수정, 테스트 케이스 넘버 수정" />
-    <MESSAGE value="프로필 사진 변경, 프로필 사진 변경여부 체크" />
-    <option name="LAST_COMMIT_MESSAGE" value="프로필 사진 변경, 프로필 사진 변경여부 체크" />
+    <option name="LAST_COMMIT_MESSAGE" value="마이페이지 수정, 테스트 케이스 넘버 수정" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
